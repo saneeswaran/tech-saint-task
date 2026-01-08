@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:techsaint_task/core/animations/product/product_laoder_grid.dart';
+import 'package:techsaint_task/features/cart/view%20model/cart_notifier.dart';
 import 'package:techsaint_task/features/home%20page/components/home_app_bar.dart';
 import 'package:techsaint_task/features/home%20page/components/product_tile.dart';
 import 'package:techsaint_task/features/home%20page/model/state/product_state.dart';
@@ -81,7 +82,14 @@ class HomePage extends ConsumerWidget {
                     childCount: products.length,
                     (context, index) {
                       final product = products[index];
-                      return ProductTile(product: product);
+                      return ProductTile(
+                        product: product,
+                        onAddToCart: () {
+                          ref
+                              .read(cartNotifier.notifier)
+                              .addToProduct(product: product, context: context);
+                        },
+                      );
                     },
                   ),
                 ),
