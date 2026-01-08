@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:techsaint_task/features/home%20page/cart/model/model/cart_model.dart';
+import 'package:techsaint_task/features/cart/model/model/cart_model.dart';
 import 'package:techsaint_task/features/home%20page/model/model/products.dart';
 
 part 'cart_with_product.freezed.dart';

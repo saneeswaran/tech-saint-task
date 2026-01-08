@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:techsaint_task/features/home%20page/cart/model/model/cart_with_product.dart';
+import 'package:techsaint_task/features/cart/model/model/cart_with_product.dart';
 part 'cart_state.freezed.dart';
 
 @freezed

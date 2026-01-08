@@ -17,7 +17,7 @@ class HiveProductsAdapter extends TypeAdapter<HiveProducts> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return HiveProducts(
-      id: fields[0] as String?,
+      id: (fields[0] as num?)?.toInt(),
       title: fields[1] as String?,
       description: fields[2] as String?,
       image: fields[3] as String?,

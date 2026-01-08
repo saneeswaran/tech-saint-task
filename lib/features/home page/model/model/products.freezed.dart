@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Products {
 
- String? get id; String? get title; double? get price; String? get description; String? get category; String? get image;
+ int? get id; String? get title; double? get price; String? get description; String? get category; String? get image;
 /// Create a copy of Products
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,7 +48,7 @@ abstract mixin class $ProductsCopyWith<$Res>  {
   factory $ProductsCopyWith(Products value, $Res Function(Products) _then) = _$ProductsCopyWithImpl;
 @useResult
 $Res call({
- String? id, String? title, double? price, String? description, String? category, String? image
+ int? id, String? title, double? price, String? description, String? category, String? image
 });
 
 
@@ -68,7 +68,7 @@ class _$ProductsCopyWithImpl<$Res>
 @pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? title = freezed,Object? price = freezed,Object? description = freezed,Object? category = freezed,Object? image = freezed,}) {
   return _then(_self.copyWith(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as String?,title: freezed == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
+as int?,title: freezed == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
 as String?,price: freezed == price ? _self.price : price // ignore: cast_nullable_to_non_nullable
 as double?,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String?,category: freezed == category ? _self.category : category // ignore: cast_nullable_to_non_nullable
@@ -158,7 +158,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? id,  String? title,  double? price,  String? description,  String? category,  String? image)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int? id,  String? title,  double? price,  String? description,  String? category,  String? image)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Products() when $default != null:
 return $default(_that.id,_that.title,_that.price,_that.description,_that.category,_that.image);case _:
@@ -179,7 +179,7 @@ return $default(_that.id,_that.title,_that.price,_that.description,_that.categor
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? id,  String? title,  double? price,  String? description,  String? category,  String? image)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int? id,  String? title,  double? price,  String? description,  String? category,  String? image)  $default,) {final _that = this;
 switch (_that) {
 case _Products():
 return $default(_that.id,_that.title,_that.price,_that.description,_that.category,_that.image);case _:
@@ -199,7 +199,7 @@ return $default(_that.id,_that.title,_that.price,_that.description,_that.categor
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? id,  String? title,  double? price,  String? description,  String? category,  String? image)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int? id,  String? title,  double? price,  String? description,  String? category,  String? image)?  $default,) {final _that = this;
 switch (_that) {
 case _Products() when $default != null:
 return $default(_that.id,_that.title,_that.price,_that.description,_that.category,_that.image);case _:
@@ -217,7 +217,7 @@ class _Products implements Products {
   const _Products({this.id, this.title, this.price, this.description, this.category, this.image});
   factory _Products.fromJson(Map<String, dynamic> json) => _$ProductsFromJson(json);
 
-@override final  String? id;
+@override final  int? id;
 @override final  String? title;
 @override final  double? price;
 @override final  String? description;
@@ -257,7 +257,7 @@ abstract mixin class _$ProductsCopyWith<$Res> implements $ProductsCopyWith<$Res>
   factory _$ProductsCopyWith(_Products value, $Res Function(_Products) _then) = __$ProductsCopyWithImpl;
 @override @useResult
 $Res call({
- String? id, String? title, double? price, String? description, String? category, String? image
+ int? id, String? title, double? price, String? description, String? category, String? image
 });
 
 
@@ -277,7 +277,7 @@ class __$ProductsCopyWithImpl<$Res>
 @override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? title = freezed,Object? price = freezed,Object? description = freezed,Object? category = freezed,Object? image = freezed,}) {
   return _then(_Products(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as String?,title: freezed == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
+as int?,title: freezed == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
 as String?,price: freezed == price ? _self.price : price // ignore: cast_nullable_to_non_nullable
 as double?,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String?,category: freezed == category ? _self.category : category // ignore: cast_nullable_to_non_nullable

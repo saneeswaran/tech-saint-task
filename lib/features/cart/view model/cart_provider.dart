@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/legacy.dart';
-import 'package:techsaint_task/features/home%20page/cart/model/model/cart_model.dart';
-import 'package:techsaint_task/features/home%20page/cart/model/model/cart_with_product.dart';
-import 'package:techsaint_task/features/home%20page/cart/model/state/cart_state.dart';
+import 'package:techsaint_task/features/cart/model/model/cart_model.dart';
+import 'package:techsaint_task/features/cart/model/model/cart_with_product.dart';
+import 'package:techsaint_task/features/cart/model/state/cart_state.dart';
 import 'package:techsaint_task/features/home%20page/model/model/products.dart';
 
 class CartProvider extends StateNotifier<CartState> {
@@ -20,7 +20,7 @@ class CartProvider extends StateNotifier<CartState> {
     state = CartState.loaded(updatedState);
   }
 
-  double getProductAmount(String productId) {
+  double getProductAmount(int productId) {
     final oldData = state.maybeWhen(orElse: () => [], loaded: (data) => data);
     final conveteddata = List<CartWithProduct>.from(oldData);
 
@@ -42,10 +42,10 @@ class CartProvider extends StateNotifier<CartState> {
     return totalAmount;
   }
 
-  void removeProduct(String product) {
+  void removeProduct(int productId) {
     final oldData = state.maybeWhen(orElse: () => [], loaded: (data) => data);
     final convertedData = List<CartWithProduct>.from(oldData);
-    final index = convertedData.indexWhere((e) => e.product.id == product);
+    final index = convertedData.indexWhere((e) => e.product.id == productId);
     convertedData.removeAt(index);
     state = CartState.loaded(convertedData);
   }

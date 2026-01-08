@@ -6,7 +6,7 @@ part 'hive_products.g.dart';
 @HiveType(typeId: 0)
 class HiveProducts extends HiveObject {
   @HiveField(0)
-  final String? id;
+  final int? id;
   @HiveField(1)
   final String? title;
   @HiveField(2)

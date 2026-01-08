@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$CartModel {
 
- String? get id; int? get quantity;
+ int? get id; int? get quantity;
 /// Create a copy of CartModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,7 +48,7 @@ abstract mixin class $CartModelCopyWith<$Res>  {
   factory $CartModelCopyWith(CartModel value, $Res Function(CartModel) _then) = _$CartModelCopyWithImpl;
 @useResult
 $Res call({
- String? id, int? quantity
+ int? id, int? quantity
 });
 
 
@@ -68,7 +68,7 @@ class _$CartModelCopyWithImpl<$Res>
 @pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? quantity = freezed,}) {
   return _then(_self.copyWith(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as String?,quantity: freezed == quantity ? _self.quantity : quantity // ignore: cast_nullable_to_non_nullable
+as int?,quantity: freezed == quantity ? _self.quantity : quantity // ignore: cast_nullable_to_non_nullable
 as int?,
   ));
 }
@@ -154,7 +154,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? id,  int? quantity)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int? id,  int? quantity)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _CartModel() when $default != null:
 return $default(_that.id,_that.quantity);case _:
@@ -175,7 +175,7 @@ return $default(_that.id,_that.quantity);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? id,  int? quantity)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int? id,  int? quantity)  $default,) {final _that = this;
 switch (_that) {
 case _CartModel():
 return $default(_that.id,_that.quantity);case _:
@@ -195,7 +195,7 @@ return $default(_that.id,_that.quantity);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? id,  int? quantity)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int? id,  int? quantity)?  $default,) {final _that = this;
 switch (_that) {
 case _CartModel() when $default != null:
 return $default(_that.id,_that.quantity);case _:
@@ -213,7 +213,7 @@ class _CartModel implements CartModel {
   const _CartModel({this.id, this.quantity = 1});
   factory _CartModel.fromJson(Map<String, dynamic> json) => _$CartModelFromJson(json);
 
-@override final  String? id;
+@override final  int? id;
 @override@JsonKey() final  int? quantity;
 
 /// Create a copy of CartModel
@@ -249,7 +249,7 @@ abstract mixin class _$CartModelCopyWith<$Res> implements $CartModelCopyWith<$Re
   factory _$CartModelCopyWith(_CartModel value, $Res Function(_CartModel) _then) = __$CartModelCopyWithImpl;
 @override @useResult
 $Res call({
- String? id, int? quantity
+ int? id, int? quantity
 });
 
 
@@ -269,7 +269,7 @@ class __$CartModelCopyWithImpl<$Res>
 @override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? quantity = freezed,}) {
   return _then(_CartModel(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as String?,quantity: freezed == quantity ? _self.quantity : quantity // ignore: cast_nullable_to_non_nullable
+as int?,quantity: freezed == quantity ? _self.quantity : quantity // ignore: cast_nullable_to_non_nullable
 as int?,
   ));
 }

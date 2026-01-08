@@ -7,7 +7,7 @@ part of 'cart_model.dart';
 // **************************************************************************
 
 _CartModel _$CartModelFromJson(Map<String, dynamic> json) => _CartModel(
-  id: json['id'] as String?,
+  id: (json['id'] as num?)?.toInt(),
   quantity: (json['quantity'] as num?)?.toInt() ?? 1,
 );
 
