@@ -12,18 +12,24 @@ class HomeAppBar extends StatelessWidget {
       child: Column(
         crossAxisAlignment: .start,
         children: [
-          const SizedBox(height: 60),
+          const SizedBox(height: 50),
           // Welcome Text
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                "Good Morning",
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.grey.shade600,
-                  fontWeight: FontWeight.w500,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Good Morning",
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey.shade600,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  IconButton(onPressed: () {}, icon: const Icon(Icons.mood)),
+                ],
               ),
               const SizedBox(height: 4),
               const Text(

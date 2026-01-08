@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:techsaint_task/core/animations/cart/cart_list_loader.dart';
 import 'package:techsaint_task/core/constants/constants.dart';
-import 'package:techsaint_task/core/widgets/loader.dart';
 import 'package:techsaint_task/features/cart/model/state/cart_state.dart';
 import 'package:techsaint_task/features/cart/view%20model/cart_notifier.dart';
 
@@ -27,13 +27,12 @@ class _CartPageState extends ConsumerState<CartPage> {
       ),
       body: cartState.when(
         initial: () => const SizedBox.shrink(),
-        loading: () => const Loader(),
+        loading: () => const CartListLoader(),
         error: (error) => Text(error),
         loaded: (cartItems) {
           if (cartItems.isEmpty) {
             return const Center(child: Text("Cart is empty"));
           }
-
           return Column(
             children: [
               // Cart Items
@@ -45,7 +44,9 @@ class _CartPageState extends ConsumerState<CartPage> {
                   itemBuilder: (context, index) {
                     final item = cartItems[index];
                     final product = item.product;
-
+                    final specificProductAmount = ref
+                        .watch(cartNotifier.notifier)
+                        .getProductAmount(product.id ?? 0);
                     return Container(
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -108,7 +109,7 @@ class _CartPageState extends ConsumerState<CartPage> {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        '$currency${product.price?.toStringAsFixed(2)}',
+                                        '$currency${specificProductAmount.toStringAsFixed(2)}',
                                         style: const TextStyle(
                                           fontSize: 18,
                                           fontWeight: FontWeight.bold,
@@ -136,6 +137,7 @@ class _CartPageState extends ConsumerState<CartPage> {
                                               onPressed: () {
                                                 notifier.decreaseQuantity(
                                                   productId: product.id ?? 0,
+                                                  context: context,
                                                 );
                                               },
                                               padding: EdgeInsets.zero,

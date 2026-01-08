@@ -3,16 +3,19 @@
 // Check in to version control
 
 import 'package:hive_ce/hive.dart';
+import 'package:techsaint_task/features/cart/model/model/cart_with_product_hive.dart';
 import 'package:techsaint_task/features/home%20page/model/hive/hive_products.dart';
 
 extension HiveRegistrar on HiveInterface {
   void registerAdapters() {
+    registerAdapter(CartWithProductHiveAdapter());
     registerAdapter(HiveProductsAdapter());
   }
 }
 
 extension IsolatedHiveRegistrar on IsolatedHiveInterface {
   void registerAdapters() {
+    registerAdapter(CartWithProductHiveAdapter());
     registerAdapter(HiveProductsAdapter());
   }
 }

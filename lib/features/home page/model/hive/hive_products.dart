@@ -15,5 +15,14 @@ class HiveProducts extends HiveObject {
   final String? image;
   @HiveField(4)
   final double? price;
-  HiveProducts({this.id, this.title, this.description, this.image, this.price});
+  @HiveField(5)
+  final String? category;
+  HiveProducts({
+    this.id,
+    this.title,
+    this.description,
+    this.image,
+    this.price,
+    this.category,
+  });
 }
