@@ -13,7 +13,11 @@ class CartProvider extends StateNotifier<CartState> {
       product: product,
       cart: cart,
     );
-    state = CartState.loaded([cartWithProduct]);
+    final oldData = state.maybeWhen(orElse: () => [], loaded: (data) => data);
+    final convertedData = List<CartWithProduct>.from(oldData);
+
+    final updatedState = [...convertedData, cartWithProduct];
+    state = CartState.loaded(updatedState);
   }
 
   double getProductAmount(String productId) {
@@ -36,5 +40,19 @@ class CartProvider extends StateNotifier<CartState> {
       totalAmount += cart.cart.quantity! * cart.product.price!;
     }
     return totalAmount;
+  }
+
+  void removeProduct(String product) {
+    final oldData = state.maybeWhen(orElse: () => [], loaded: (data) => data);
+    final convertedData = List<CartWithProduct>.from(oldData);
+    final index = convertedData.indexWhere((e) => e.product.id == product);
+    convertedData.removeAt(index);
+    state = CartState.loaded(convertedData);
+  }
+
+  @override
+  void dispose() {
+    state = const CartState.initial();
+    super.dispose();
   }
 }

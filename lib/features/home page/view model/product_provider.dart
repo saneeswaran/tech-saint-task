@@ -37,4 +37,10 @@ class ProductProvider extends StateNotifier<ProductState> {
         .toList();
     state = ProductState.loaded(filter);
   }
+
+  @override
+  void dispose() {
+    state = const ProductState.initial();
+    super.dispose();
+  }
 }
