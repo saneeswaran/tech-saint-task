@@ -24,4 +24,9 @@ class ProductHiveManager {
     final box = Hive.box<HiveProducts>(boxName);
     await box.put(hiveProduct.id, hiveProduct);
   }
+
+  static Future<List<HiveProducts>> getAllproducts() async {
+    final box = Hive.box<HiveProducts>(boxName);
+    return box.values.toList();
+  }
 }

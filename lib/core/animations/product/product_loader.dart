@@ -105,12 +105,7 @@ class ProductLoader extends StatelessWidget {
                                 height: 36,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
-                                  gradient: const LinearGradient(
-                                    colors: [
-                                      Color(0xFF667EEA),
-                                      Color(0xFF764BA2),
-                                    ],
-                                  ),
+                                  color: Colors.white,
                                 ),
                                 child: IconButton(
                                   padding: EdgeInsets.zero,

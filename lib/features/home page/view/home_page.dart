@@ -4,7 +4,7 @@ import 'package:techsaint_task/core/animations/product/product_laoder_grid.dart'
 import 'package:techsaint_task/features/home%20page/components/home_app_bar.dart';
 import 'package:techsaint_task/features/home%20page/components/product_tile.dart';
 import 'package:techsaint_task/features/home%20page/model/state/product_state.dart';
-import 'package:techsaint_task/features/home%20page/view%20model/product_provider.dart';
+import 'package:techsaint_task/features/home%20page/view%20model/product_notifier.dart';
 
 class HomePage extends ConsumerWidget {
   const HomePage({super.key});
@@ -56,24 +56,37 @@ class HomePage extends ConsumerWidget {
             loading: () => const SliverToBoxAdapter(child: ProductLoaderGrid()),
             error: (error) =>
                 SliverToBoxAdapter(child: Center(child: Text(error))),
-            loaded: (products) => SliverPadding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              sliver: SliverGrid(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 0.6,
-                  mainAxisSpacing: 10,
-                  crossAxisSpacing: 10,
+            loaded: (products) {
+              if (products.isEmpty) {
+                return const SliverToBoxAdapter(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(height: 200),
+                      Center(child: Text("No Products")),
+                    ],
+                  ),
+                );
+              }
+              return SliverPadding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                sliver: SliverGrid(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    childAspectRatio: 0.6,
+                    mainAxisSpacing: 10,
+                    crossAxisSpacing: 10,
+                  ),
+                  delegate: SliverChildBuilderDelegate(
+                    childCount: products.length,
+                    (context, index) {
+                      final product = products[index];
+                      return ProductTile(product: product);
+                    },
+                  ),
                 ),
-                delegate: SliverChildBuilderDelegate(
-                  childCount: products.length,
-                  (context, index) {
-                    final product = products[index];
-                    return ProductTile(product: product);
-                  },
-                ),
-              ),
-            ),
+              );
+            },
           ),
         ],
       ),
