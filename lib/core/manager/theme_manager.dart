@@ -1,15 +1,27 @@
 import 'package:hive_ce/hive.dart';
 
 class ThemeManager {
-  static final themeKey = "lightMode";
-  static final boxName = "LocalBox";
+  static const String themeKey = "lightMode";
+  static const String boxName = "LocalBox";
+
+  static late Box box;
 
   static Future<void> safeInits() async {
-    await Hive.openBox(boxName);
+    box = await Hive.openBox(boxName);
   }
 
   static bool getTheme() {
-    final box = Hive.box(boxName);
-    return box.get(themeKey, defaultValue: true);
+    final value = box.get(themeKey);
+    if (value == null) {
+      box.put(themeKey, true);
+      return true;
+    }
+    return value as bool;
+  }
+
+  static Future<void> toggleTheme({bool? isLightMode}) async {
+    final current = getTheme();
+    final value = isLightMode ?? !current;
+    await box.put(themeKey, value);
   }
 }

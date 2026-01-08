@@ -11,13 +11,16 @@ class ProductTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
+
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: theme.cardColor,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.06),
+            color: theme.shadowColor.withOpacity(0.06),
             blurRadius: 20,
             offset: const Offset(0, 4),
           ),
@@ -25,7 +28,7 @@ class ProductTile extends StatelessWidget {
       ),
       child: Column(
         children: [
-          //image
+          // Image
           SizedBox(
             height: 120,
             width: double.infinity,
@@ -40,18 +43,18 @@ class ProductTile extends StatelessWidget {
                   child: CircularProgressIndicator(strokeWidth: 2),
                 ),
                 errorWidget: (_, _, _) => Container(
-                  color: Colors.grey.shade200,
-                  child: const Icon(
+                  color: theme.dividerColor.withOpacity(0.2),
+                  child: Icon(
                     Icons.image_not_supported_outlined,
                     size: 40,
-                    color: Colors.grey,
+                    color: theme.disabledColor,
                   ),
                 ),
               ),
             ),
           ),
 
-          //product details
+          // Product details
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(12),
@@ -59,7 +62,7 @@ class ProductTile extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  //title
+                  // Title & description
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -67,47 +70,40 @@ class ProductTile extends StatelessWidget {
                         product.title ?? 'Product Title',
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                        ),
+                        style: textTheme.titleMedium?.copyWith(fontSize: 14),
                       ),
                       const SizedBox(height: 4),
-                      //description
                       Text(
                         product.description ?? 'No description available',
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
+                        style: textTheme.bodySmall?.copyWith(
                           fontSize: 11,
-                          color: Colors.grey.shade600,
+                          color: theme.hintColor,
                         ),
                       ),
                     ],
                   ),
 
-                  //price
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         '$currency ${product.price?.toStringAsFixed(2) ?? '0.00'}',
-                        style: const TextStyle(
-                          fontSize: 16,
+                        style: textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.w700,
-                          color: Color(0xFF2E3A59),
+                          color: theme.textTheme.bodyMedium?.color,
                         ),
                       ),
-
                       Container(
                         width: 34,
                         height: 34,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
-                          color: Colors.white,
+                          color: theme.cardColor,
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.06),
+                              color: theme.shadowColor.withOpacity(0.06),
                               blurRadius: 20,
                               offset: const Offset(0, 4),
                             ),
@@ -116,10 +112,10 @@ class ProductTile extends StatelessWidget {
                         child: IconButton(
                           padding: EdgeInsets.zero,
                           onPressed: onAddToCart,
-                          icon: const Icon(
+                          icon: Icon(
                             Icons.add_shopping_cart_rounded,
                             size: 18,
-                            color: Colors.black,
+                            color: theme.iconTheme.color,
                           ),
                         ),
                       ),

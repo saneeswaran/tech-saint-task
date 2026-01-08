@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:techsaint_task/core/animations/cart/cart_list_loader.dart';
 import 'package:techsaint_task/core/constants/constants.dart';
+import 'package:techsaint_task/core/constants/theme_notifier.dart';
 import 'package:techsaint_task/features/cart/model/state/cart_state.dart';
 import 'package:techsaint_task/features/cart/view%20model/cart_notifier.dart';
 
@@ -15,27 +16,42 @@ class CartPage extends ConsumerStatefulWidget {
 class _CartPageState extends ConsumerState<CartPage> {
   @override
   Widget build(BuildContext context) {
+    final isLightTheme = ref.watch(themeProvider);
     final cartState = ref.watch(cartNotifier);
     final notifier = ref.read(cartNotifier.notifier);
+
+    final bgColor = isLightTheme ? Colors.white : const Color(0xFF121212);
+    final appBarColor = isLightTheme ? Colors.white : const Color(0xFF1F1F1F);
+    final textColor = isLightTheme ? Colors.black : Colors.white70;
+    final subTextColor = isLightTheme ? Colors.grey[600] : Colors.grey[400];
+    final shadowColor = isLightTheme
+        ? Colors.grey.withOpacity(0.1)
+        : Colors.black.withOpacity(0.3);
+    final priceColor = isLightTheme ? Colors.green : Colors.greenAccent[400];
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: bgColor,
       appBar: AppBar(
         title: const Text('Shopping Cart'),
         centerTitle: true,
-        backgroundColor: Colors.white,
+        backgroundColor: appBarColor,
         elevation: 1,
+        foregroundColor: textColor,
       ),
       body: cartState.when(
         initial: () => const SizedBox.shrink(),
         loading: () => const CartListLoader(),
-        error: (error) => Text(error),
+        error: (error) => Center(
+          child: Text(error, style: TextStyle(color: textColor)),
+        ),
         loaded: (cartItems) {
           if (cartItems.isEmpty) {
-            return const Center(child: Text("Cart is empty"));
+            return Center(
+              child: Text("Cart is empty", style: TextStyle(color: textColor)),
+            );
           }
           return Column(
             children: [
-              // Cart Items
               Expanded(
                 child: ListView.separated(
                   padding: const EdgeInsets.all(16),
@@ -47,13 +63,14 @@ class _CartPageState extends ConsumerState<CartPage> {
                     final specificProductAmount = ref
                         .watch(cartNotifier.notifier)
                         .getProductAmount(product.id ?? 0);
+
                     return Container(
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: bgColor,
                         borderRadius: BorderRadius.circular(12),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.grey.withOpacity(0.1),
+                            color: shadowColor,
                             blurRadius: 8,
                             offset: const Offset(0, 2),
                           ),
@@ -63,7 +80,6 @@ class _CartPageState extends ConsumerState<CartPage> {
                         padding: const EdgeInsets.all(12),
                         child: Row(
                           children: [
-                            // Product Image
                             Container(
                               width: 80,
                               height: 80,
@@ -76,17 +92,16 @@ class _CartPageState extends ConsumerState<CartPage> {
                               ),
                             ),
                             const SizedBox(width: 16),
-
-                            // Product Details
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
                                     product.title ?? '',
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontWeight: FontWeight.w600,
                                       fontSize: 16,
+                                      color: textColor,
                                     ),
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
@@ -97,42 +112,39 @@ class _CartPageState extends ConsumerState<CartPage> {
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
-                                      color: Colors.grey[600],
+                                      color: subTextColor,
                                       fontSize: 14,
                                     ),
                                   ),
                                   const SizedBox(height: 8),
-
-                                  // Price and Quantity
                                   Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
                                         '$currency${specificProductAmount.toStringAsFixed(2)}',
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                           fontSize: 18,
                                           fontWeight: FontWeight.bold,
-                                          color: Colors.green,
+                                          color: priceColor,
                                         ),
                                       ),
-
-                                      // Quantity Controls
                                       Container(
                                         decoration: BoxDecoration(
                                           borderRadius: BorderRadius.circular(
                                             20,
                                           ),
                                           border: Border.all(
-                                            color: Colors.grey[300]!,
+                                            color: subTextColor!,
                                           ),
                                         ),
                                         child: Row(
                                           children: [
                                             IconButton(
-                                              icon: const Icon(
+                                              icon: Icon(
                                                 Icons.remove,
                                                 size: 18,
+                                                color: textColor,
                                               ),
                                               onPressed: () {
                                                 notifier.decreaseQuantity(
@@ -144,14 +156,16 @@ class _CartPageState extends ConsumerState<CartPage> {
                                             ),
                                             Text(
                                               '${item.cart.quantity}',
-                                              style: const TextStyle(
+                                              style: TextStyle(
                                                 fontWeight: FontWeight.w600,
+                                                color: textColor,
                                               ),
                                             ),
                                             IconButton(
-                                              icon: const Icon(
+                                              icon: Icon(
                                                 Icons.add,
                                                 size: 18,
+                                                color: textColor,
                                               ),
                                               onPressed: () {
                                                 notifier.increaseQuantity(

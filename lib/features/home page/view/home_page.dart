@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:techsaint_task/core/animations/product/product_laoder_grid.dart';
+import 'package:techsaint_task/core/constants/theme_notifier.dart';
 import 'package:techsaint_task/features/cart/view%20model/cart_notifier.dart';
 import 'package:techsaint_task/features/home%20page/components/home_app_bar.dart';
 import 'package:techsaint_task/features/home%20page/components/product_tile.dart';
@@ -12,19 +13,19 @@ class HomePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final theme = Theme.of(context);
     final productState = ref.watch(productNotifier);
-
+    final isDark = ref.watch(themeProvider);
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: theme.scaffoldBackgroundColor,
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: [
-          // App Bar
           SliverAppBar(
             automaticallyImplyLeading: false,
             expandedHeight: 200,
             pinned: true,
-            backgroundColor: Colors.white,
+            backgroundColor: theme.scaffoldBackgroundColor,
             elevation: 0,
             flexibleSpace: FlexibleSpaceBar(
               background: Container(
@@ -32,39 +33,46 @@ class HomePage extends ConsumerWidget {
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: [Colors.blue.shade50, Colors.white],
+                    colors: [
+                      !isDark ? theme.cardColor : Colors.blue.shade50,
+                      theme.scaffoldBackgroundColor,
+                    ],
                   ),
                 ),
                 child: const HomeAppBar(),
               ),
             ),
           ),
-
-          // Title
-          const SliverToBoxAdapter(
+          SliverToBoxAdapter(
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
               child: Text(
                 "All Products",
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                style: theme.textTheme.headlineSmall?.copyWith(),
               ),
             ),
           ),
-
-          // Products
           productState.when(
             initial: () => const SliverToBoxAdapter(child: SizedBox.shrink()),
             loading: () => const SliverToBoxAdapter(child: ProductLoaderGrid()),
-            error: (error) =>
-                SliverToBoxAdapter(child: Center(child: Text(error))),
+            error: (error) => SliverToBoxAdapter(
+              child: Center(
+                child: Text(error, style: theme.textTheme.bodyMedium),
+              ),
+            ),
             loaded: (products) {
               if (products.isEmpty) {
-                return const SliverToBoxAdapter(
+                return SliverToBoxAdapter(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      SizedBox(height: 200),
-                      Center(child: Text("No Products")),
+                      const SizedBox(height: 200),
+                      Center(
+                        child: Text(
+                          "No Products",
+                          style: theme.textTheme.bodyMedium,
+                        ),
+                      ),
                     ],
                   ),
                 );

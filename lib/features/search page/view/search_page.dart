@@ -18,6 +18,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
   String searchQuery = '';
 
   @override
+  /// Cleans up resources used by the widget.
   void dispose() {
     searchController.dispose();
     super.dispose();
@@ -29,11 +30,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
     final mainState = ref.watch(productNotifier);
     final hasText = searchController.text.isNotEmpty;
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Search Products"),
-        centerTitle: true,
-        backgroundColor: Colors.white,
-      ),
+      appBar: AppBar(title: const Text("Search Products"), centerTitle: true),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
