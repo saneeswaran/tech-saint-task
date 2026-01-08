@@ -1,52 +1,48 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:techsaint_task/features/home%20page/components/product_tile.dart';
-import 'package:techsaint_task/features/home%20page/model/state/product_state.dart';
-import 'package:techsaint_task/features/home%20page/view%20model/product_provider.dart';
+import 'package:techsaint_task/core/widgets/custom_text_form_field.dart';
 
-class HomePage extends ConsumerStatefulWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
-  ConsumerState<HomePage> createState() => _HomePageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends ConsumerState<HomePage> {
-  @override
-  void initState() {
-    ref.read(productNotifier.notifier).getProducts();
-    super.initState();
-  }
-
+class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    final productState = ref.watch(productNotifier);
+    final Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(16),
-        child: productState.when(
-          initial: () => const SizedBox.shrink(),
-          loading: () => const Center(child: CircularProgressIndicator()),
-          loaded: (products) {
-            return GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 16,
-                mainAxisSpacing: 16,
-                childAspectRatio: 0.75,
+        child: CustomScrollView(
+          slivers: [
+            const SliverAppBar(
+              title: Text("Welcome,", style: TextStyle(color: Colors.black)),
+            ),
+            SliverToBoxAdapter(
+              child: SizedBox(
+                height: size.height * 0.3,
+                width: size.width * 1,
+                child: Column(
+                  children: [
+                    GestureDetector(
+                      child: Hero(
+                        tag: "searchTag",
+                        child: AbsorbPointer(
+                          absorbing: true,
+                          child: CustomTextFormField(
+                            controller: TextEditingController(),
+                            labelText: "Search here...",
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              itemCount: products.length,
-              itemBuilder: (context, index) {
-                return ProductTile(
-                  product: products[index],
-                  onTap: () {},
-                  onAddToCart: () {},
-                  onFavorite: () {},
-                );
-              },
-            );
-          },
-          error: (error) => Center(child: Text(error)),
+            ),
+          ],
         ),
       ),
     );

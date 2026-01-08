@@ -14,9 +14,12 @@ class _BottomNaviState extends State<BottomNavi> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
+        currentIndex: currentIndex,
         items: bottomNavItems,
         selectedItemColor: Colors.pinkAccent,
         unselectedItemColor: Colors.grey.shade500,
+        showSelectedLabels: true,
+        showUnselectedLabels: false,
         onTap: (int index) {
           setState(() {
             currentIndex = index;

@@ -5,5 +5,5 @@ class AppThemes {
 
   static final darkTheme = ThemeData.dark();
 
-  static final defaultTheme = ThemeData();
+  static final defaultTheme = ThemeData(scaffoldBackgroundColor: Colors.white);
 }
