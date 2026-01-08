@@ -1,4 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:techsaint_task/core/constants/constants.dart';
 import 'package:techsaint_task/features/home%20page/model/model/products.dart';
 
 class ProductTile extends StatelessWidget {
@@ -31,198 +33,109 @@ class ProductTile extends StatelessWidget {
             ),
           ],
         ),
-        child: Stack(
+        child: Column(
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Product Image
-                Container(
-                  height: 140,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.vertical(
-                      top: Radius.circular(16),
-                    ),
-                    color: Colors.grey.shade50,
+            //image
+            SizedBox(
+              height: 120,
+              width: double.infinity,
+              child: ClipRRect(
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(16),
+                ),
+                child: CachedNetworkImage(
+                  imageUrl: product.image ?? '',
+                  fit: BoxFit.cover,
+                  placeholder: (_, _) => const Center(
+                    child: CircularProgressIndicator(strokeWidth: 2),
                   ),
-                  child: ClipRRect(
-                    borderRadius: const BorderRadius.vertical(
-                      top: Radius.circular(16),
-                    ),
-                    child: Image.network(
-                      product.image ?? '',
-                      fit: BoxFit.cover,
-                      loadingBuilder: (context, child, loadingProgress) {
-                        if (loadingProgress == null) return child;
-                        return Center(
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            value: loadingProgress.expectedTotalBytes != null
-                                ? loadingProgress.cumulativeBytesLoaded /
-                                      (loadingProgress.expectedTotalBytes ?? 1)
-                                : null,
-                          ),
-                        );
-                      },
-                      errorBuilder: (context, error, stackTrace) {
-                        return Container(
-                          color: Colors.grey.shade200,
-                          child: Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.image_not_supported_outlined,
-                                  color: Colors.grey.shade400,
-                                  size: 40,
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  'No Image',
-                                  style: TextStyle(
-                                    color: Colors.grey.shade500,
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
+                  errorWidget: (_, _, _) => Container(
+                    color: Colors.grey.shade200,
+                    child: const Icon(
+                      Icons.image_not_supported_outlined,
+                      size: 40,
+                      color: Colors.grey,
                     ),
                   ),
                 ),
+              ),
+            ),
 
-                // Product Details
-                Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 8),
-
-                      // Product Title
-                      Text(
-                        product.title ?? 'Product Title',
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          height: 1.4,
-                          color: Colors.black87,
+            //product details
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    //title
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          product.title ?? 'Product Title',
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-
-                      const SizedBox(height: 4),
-
-                      // Product Description
-                      Text(
-                        product.description ?? 'No description available',
-                        style: TextStyle(
-                          fontSize: 11,
-                          color: Colors.grey.shade600,
-                          height: 1.4,
+                        const SizedBox(height: 4),
+                        //description
+                        Text(
+                          product.description ?? 'No description available',
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 11,
+                            color: Colors.grey.shade600,
+                          ),
                         ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
+                      ],
+                    ),
 
-                      const SizedBox(height: 12),
+                    //price
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          '$currency ${product.price?.toStringAsFixed(2) ?? '0.00'}',
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                            color: Color(0xFF2E3A59),
+                          ),
+                        ),
 
-                      // Price and Actions
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          // Price
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                '\$${product.price?.toStringAsFixed(2) ?? '0.00'}',
-                                style: const TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w700,
-                                  color: Color(0xFF2E3A59),
-                                ),
-                              ),
-                              Text(
-                                'USD',
-                                style: TextStyle(
-                                  fontSize: 10,
-                                  color: Colors.grey.shade500,
-                                  fontWeight: FontWeight.w500,
-                                ),
+                        Container(
+                          width: 34,
+                          height: 34,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.white,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.06),
+                                blurRadius: 20,
+                                offset: const Offset(0, 4),
                               ),
                             ],
                           ),
-
-                          // Add to Cart Button
-                          Container(
-                            width: 36,
-                            height: 36,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12),
-                              gradient: const LinearGradient(
-                                colors: [Color(0xFF667EEA), Color(0xFF764BA2)],
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: const Color(
-                                    0xFF667EEA,
-                                  ).withOpacity(0.3),
-                                  blurRadius: 8,
-                                  offset: const Offset(0, 4),
-                                ),
-                              ],
-                            ),
-                            child: IconButton(
-                              onPressed: onAddToCart,
-                              icon: const Icon(
-                                Icons.add_shopping_cart_rounded,
-                                color: Colors.white,
-                                size: 18,
-                              ),
-                              padding: EdgeInsets.zero,
+                          child: IconButton(
+                            padding: EdgeInsets.zero,
+                            onPressed: onAddToCart,
+                            icon: const Icon(
+                              Icons.add_shopping_cart_rounded,
+                              size: 18,
+                              color: Colors.black,
                             ),
                           ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-
-            // Favorite Button
-            Positioned(
-              top: 8,
-              right: 8,
-              child: Container(
-                width: 32,
-                height: 32,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
-                      blurRadius: 6,
+                        ),
+                      ],
                     ),
                   ],
-                ),
-                child: IconButton(
-                  onPressed: onFavorite,
-                  icon: const Icon(
-                    Icons.favorite_border,
-                    color: Colors.grey,
-                    size: 18,
-                  ),
-                  padding: EdgeInsets.zero,
                 ),
               ),
             ),

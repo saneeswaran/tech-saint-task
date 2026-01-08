@@ -1,52 +1,58 @@
 import 'package:flutter/material.dart';
 
 class CustomTextFormField extends StatelessWidget {
-  final TextEditingController controller;
-  final String? Function(String?)? validator;
-  final String labelText;
-  final Widget? prefixIcon;
-  final TextInputType? textInputType;
+  final void Function(String)? onChanged;
+  final TextEditingController? controller;
+  final void Function()? onEditingComplete;
+  final FocusNode? focusNode;
+  final void Function(String)? onSubmitted;
   final Widget? suffixIcon;
-  final Iterable<String>? autofillHints;
+  final String labelText;
   const CustomTextFormField({
     super.key,
-    required this.controller,
-    this.validator,
-    required this.labelText,
-    this.prefixIcon,
-    this.textInputType,
+    this.controller,
+    this.focusNode,
+    this.onChanged,
+    this.onEditingComplete,
+    this.onSubmitted,
     this.suffixIcon,
-    this.autofillHints,
+    required this.labelText,
   });
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      controller: controller,
-      validator: validator,
-      keyboardType: textInputType,
-      autofillHints: autofillHints,
-      decoration: InputDecoration(
-        labelText: labelText,
-        prefixIcon: prefixIcon,
-        suffixIcon: suffixIcon,
-        filled: true,
-        fillColor: const Color(0xfff6f6f6),
-        border: const OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(12)),
-          borderSide: BorderSide.none,
-        ),
-        focusedBorder: const OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(12)),
-          borderSide: BorderSide.none,
-        ),
-        errorBorder: const OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(12)),
-          borderSide: BorderSide.none,
-        ),
-        focusedErrorBorder: const OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(12)),
-          borderSide: BorderSide.none,
+    return Material(
+      color: Colors.transparent,
+      child: TextField(
+        controller: controller,
+        onChanged: onChanged,
+        onEditingComplete: onEditingComplete,
+        focusNode: focusNode,
+        onSubmitted: onSubmitted,
+        decoration: InputDecoration(
+          labelText: labelText,
+          prefixIcon: Icon(Icons.search, color: Colors.grey.shade400),
+          suffixIcon: suffixIcon,
+          hintText: "Search here...",
+          hintStyle: TextStyle(
+            color: Colors.grey.shade400,
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+          ),
+          filled: true,
+          fillColor: Colors.grey.shade100,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(40),
+            borderSide: BorderSide.none,
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(40),
+            borderSide: BorderSide.none,
+          ),
+          errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(40),
+            borderSide: BorderSide.none,
+          ),
         ),
       ),
     );

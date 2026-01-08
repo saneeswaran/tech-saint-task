@@ -14,6 +14,7 @@ class _BottomNaviState extends State<BottomNavi> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Colors.white,
         currentIndex: currentIndex,
         items: bottomNavItems,
         selectedItemColor: Colors.pinkAccent,
