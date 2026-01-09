@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:techsaint_task/core/widgets/custom_text_form_field.dart';
 import 'package:techsaint_task/core/widgets/loader.dart';
+import 'package:techsaint_task/features/home%20page/model/model/products.dart';
 import 'package:techsaint_task/features/home%20page/view%20model/product_notifier.dart';
 import 'package:techsaint_task/features/home%20page/model/state/product_state.dart';
 import 'package:techsaint_task/features/search%20page/components/product_search_tile.dart';
+import 'package:techsaint_task/features/search%20page/view/search_result_page.dart';
 
 class SearchPage extends ConsumerStatefulWidget {
   const SearchPage({super.key});
@@ -35,14 +37,51 @@ class _SearchPageState extends ConsumerState<SearchPage> {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            CustomTextFormField(
-              controller: searchController,
-              labelText: "Search products...",
-              onChanged: (query) {
-                setState(() {
-                  searchQuery = query;
-                });
-              },
+            Hero(
+              tag: "searchbar",
+              child: CustomTextFormField(
+                controller: searchController,
+                labelText: "Search products...",
+                onChanged: (query) {
+                  setState(() {
+                    searchQuery = query;
+                  });
+                },
+                onSubmitted: (String query) {
+                  if (searchController.text.trim().isEmpty) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            const SearchResultPage(products: []),
+                      ),
+                    );
+
+                    return;
+                  }
+                  final List<Products> products = ref
+                      .read(productNotifier)
+                      .maybeWhen(
+                        loaded: (products) => products,
+                        orElse: () => [],
+                      );
+
+                  final filteredProducts = products
+                      .where(
+                        (e) => e.title!.toLowerCase().contains(
+                          query.toLowerCase(),
+                        ),
+                      )
+                      .toList();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          SearchResultPage(products: filteredProducts),
+                    ),
+                  );
+                },
+              ),
             ),
             const SizedBox(height: 16),
 
