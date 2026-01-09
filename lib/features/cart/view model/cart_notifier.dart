@@ -119,12 +119,14 @@ class CartNotifier extends StateNotifier<CartState> {
     return totalAmount;
   }
 
-  Future<void> removeProduct(int productId) async {
+  Future<void> removeProduct(int productId, BuildContext context) async {
     final oldData = state.maybeWhen(orElse: () => [], loaded: (data) => data);
     final convertedData = List<CartWithProduct>.from(oldData);
     final index = convertedData.indexWhere((e) => e.product.id == productId);
     convertedData.removeAt(index);
     await CartHiveManager.deleteCart(productId);
+    if (!context.mounted) return;
+    customSnackBar(context: context, content: " ", type: SnackType.error);
     state = CartState.loaded(convertedData);
   }
 
