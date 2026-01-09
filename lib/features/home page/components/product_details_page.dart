@@ -62,7 +62,11 @@ class ProductDetailPage extends StatelessWidget {
                         ? CachedNetworkImage(
                             imageUrl: product.image!,
                             fit: BoxFit.contain,
-                            placeholder: (context, url) => const Loader(),
+                            placeholder: (context, url) => const SizedBox(
+                              height: 40,
+                              width: 40,
+                              child: Loader(),
+                            ),
                             errorWidget: (context, url, error) =>
                                 const Icon(Icons.error, color: Colors.red),
                           )

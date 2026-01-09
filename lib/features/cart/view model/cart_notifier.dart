@@ -126,7 +126,11 @@ class CartNotifier extends StateNotifier<CartState> {
     convertedData.removeAt(index);
     await CartHiveManager.deleteCart(productId);
     if (!context.mounted) return;
-    customSnackBar(context: context, content: " ", type: SnackType.error);
+    customSnackBar(
+      context: context,
+      content: "Product removed from cart",
+      type: SnackType.error,
+    );
     state = CartState.loaded(convertedData);
   }
 
