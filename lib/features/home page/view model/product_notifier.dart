@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:techsaint_task/core/utils/utils.dart';
+import 'package:techsaint_task/features/home%20page/model/hive/hive_products.dart';
 import 'package:techsaint_task/features/home%20page/model/model/products.dart';
 import 'package:techsaint_task/features/home%20page/model/state/product_state.dart';
 import 'package:techsaint_task/features/home%20page/service/product_hive_manager.dart';
@@ -33,10 +34,13 @@ class ProductNotifier extends StateNotifier<ProductState> {
   List<Products> _allProducts = [];
 
   Future<void> getProducts() async {
-    try {
-      final checkInternet = await Utils.checkInternetConnection();
+    state = const ProductState.loading();
 
-      if (!checkInternet) {
+    try {
+      final hasInternet = await Utils.checkInternetConnection();
+
+      //  load from Hive
+      if (!hasInternet) {
         final localProducts = await ProductHiveManager.getAllproducts();
 
         final convertedProducts = localProducts
@@ -56,13 +60,25 @@ class ProductNotifier extends StateNotifier<ProductState> {
         return;
       }
 
-      state = const ProductState.loading();
+      //  fetch from API
       final result = await ProductRepo.getProducts();
 
-      result.fold((error) => state = ProductState.error(error), (products) {
-        _allProducts = products;
-        state = ProductState.loaded(_allProducts);
-      });
+      result.fold(
+        (error) {
+          state = ProductState.error(error);
+        },
+        (products) async {
+          _allProducts = products;
+          final hiveProduct = products
+              .map((e) => HiveProducts.fromProducts(e))
+              .toList();
+          // Clear & cache ONLY after successful fetch
+          await ProductHiveManager.clearProducts();
+          await ProductHiveManager.addProducts(hiveProduct);
+
+          state = ProductState.loaded(_allProducts);
+        },
+      );
     } catch (e) {
       state = ProductState.error(e.toString());
     }

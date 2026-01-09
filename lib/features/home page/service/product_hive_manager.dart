@@ -10,9 +10,11 @@ class ProductHiveManager {
     await Hive.openBox<HiveProducts>(boxName);
   }
 
-  static Future<void> addProducts(HiveProducts hiveProduct) async {
+  static Future<void> addProducts(List<HiveProducts> hiveProduct) async {
     final box = Hive.box<HiveProducts>(boxName);
-    await box.put(hiveProduct.id, hiveProduct);
+    for (final product in hiveProduct) {
+      await box.put(product.id, product);
+    }
   }
 
   static Future<void> deleteproduct(int id) async {
@@ -28,5 +30,10 @@ class ProductHiveManager {
   static Future<List<HiveProducts>> getAllproducts() async {
     final box = Hive.box<HiveProducts>(boxName);
     return box.values.toList();
+  }
+
+  static Future<void> clearProducts() async {
+    final box = Hive.box<HiveProducts>(boxName);
+    await box.clear();
   }
 }

@@ -12,57 +12,75 @@ class HomeAppBar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final isLightTheme = ref.watch(themeProvider);
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: 50),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                "Good Morning",
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.grey.shade600,
-                  fontWeight: FontWeight.w500,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isTablet = constraints.maxWidth >= 600;
+
+        return Padding(
+          padding: EdgeInsets.symmetric(horizontal: isTablet ? 40 : 24),
+          child: SingleChildScrollView(
+            physics: const NeverScrollableScrollPhysics(),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: isTablet ? 60 : 40),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Good Morning",
+                      style: TextStyle(
+                        fontSize: isTablet ? 16 : 14,
+                        color: Colors.grey.shade600,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () =>
+                          ref.read(themeProvider.notifier).toggleTheme(),
+                      icon: Icon(isLightTheme ? Iconsax.moon : Iconsax.sun),
+                    ),
+                  ],
                 ),
-              ),
-              IconButton(
-                onPressed: () => ref.read(themeProvider.notifier).toggleTheme(),
-                icon: Icon(isLightTheme ? Iconsax.moon : Iconsax.sun),
-              ),
-            ],
-          ),
-          const SizedBox(height: 4),
-          Text(
-            "Welcome Back!",
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: isLightTheme ? Colors.black : Colors.white,
-            ),
-          ),
-          const SizedBox(height: 24),
-          GestureDetector(
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const SearchPage()),
-            ),
-            child: Hero(
-              tag: "searchbar",
-              child: AbsorbPointer(
-                absorbing: true,
-                child: CustomTextFormField(
-                  controller: TextEditingController(),
-                  labelText: "Search products...",
+
+                const SizedBox(height: 4),
+
+                Text(
+                  "Welcome Back!",
+                  style: TextStyle(
+                    fontSize: isTablet ? 30 : 22,
+                    fontWeight: FontWeight.bold,
+                    color: isLightTheme ? Colors.black : Colors.white,
+                  ),
                 ),
-              ),
+
+                SizedBox(height: isTablet ? 20 : 16),
+
+                GestureDetector(
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const SearchPage()),
+                  ),
+                  child: Hero(
+                    tag: "searchbar",
+                    child: AbsorbPointer(
+                      absorbing: true,
+                      child: SizedBox(
+                        height: 52,
+                        child: CustomTextFormField(
+                          controller: TextEditingController(),
+                          labelText: "Search products...",
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

@@ -79,27 +79,47 @@ class HomePage extends ConsumerWidget {
               }
               return SliverPadding(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
-                sliver: SliverGrid(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    childAspectRatio: 0.6,
-                    mainAxisSpacing: 10,
-                    crossAxisSpacing: 10,
-                  ),
-                  delegate: SliverChildBuilderDelegate(
-                    childCount: products.length,
-                    (context, index) {
-                      final product = products[index];
-                      return ProductTile(
-                        product: product,
-                        onAddToCart: () {
-                          ref
-                              .read(cartNotifier.notifier)
-                              .addToProduct(product: product, context: context);
+                sliver: SliverLayoutBuilder(
+                  builder: (context, constraints) {
+                    int crossAxisCount = 2;
+                    double aspectRatio = 0.6;
+
+                    final width = constraints.crossAxisExtent;
+
+                    if (width >= 600 && width < 1024) {
+                      crossAxisCount = 3;
+                      aspectRatio = 0.65;
+                    } else if (width >= 1024) {
+                      crossAxisCount = 5;
+                      aspectRatio = 0.7;
+                    }
+
+                    return SliverGrid(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: crossAxisCount,
+                        childAspectRatio: aspectRatio,
+                        mainAxisSpacing: 16,
+                        crossAxisSpacing: 16,
+                      ),
+                      delegate: SliverChildBuilderDelegate(
+                        childCount: products.length,
+                        (context, index) {
+                          final product = products[index];
+                          return ProductTile(
+                            product: product,
+                            onAddToCart: () {
+                              ref
+                                  .read(cartNotifier.notifier)
+                                  .addToProduct(
+                                    product: product,
+                                    context: context,
+                                  );
+                            },
+                          );
                         },
-                      );
-                    },
-                  ),
+                      ),
+                    );
+                  },
                 ),
               );
             },

@@ -38,85 +38,102 @@ class _CartPageState extends ConsumerState<CartPage> {
         elevation: 1,
         foregroundColor: textColor,
       ),
-      body: cartState.when(
-        initial: () => const SizedBox.shrink(),
-        loading: () => const CartListLoader(),
-        error: (error) => Center(
-          child: Text(error, style: TextStyle(color: textColor)),
-        ),
-        loaded: (cartItems) {
-          if (cartItems.isEmpty) {
-            return Center(
-              child: Text("Cart is empty", style: TextStyle(color: textColor)),
-            );
-          }
-          return Column(
-            children: [
-              Expanded(
-                child: ListView.separated(
-                  padding: const EdgeInsets.all(16),
-                  itemCount: cartItems.length,
-                  separatorBuilder: (_, _) => const SizedBox(height: 12),
-                  itemBuilder: (context, index) {
-                    final item = cartItems[index];
-                    final product = item.product;
-                    final specificProductAmount = ref
-                        .watch(cartNotifier.notifier)
-                        .getProductAmount(product.id ?? 0);
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          final isTablet = constraints.maxWidth >= 600;
+          return cartState.when(
+            initial: () => const SizedBox.shrink(),
+            loading: () => const CartListLoader(),
+            error: (error) => Center(
+              child: Text(error, style: TextStyle(color: textColor)),
+            ),
+            loaded: (cartItems) {
+              if (cartItems.isEmpty) {
+                return Center(
+                  child: Text(
+                    "Cart is empty",
+                    style: TextStyle(color: textColor),
+                  ),
+                );
+              }
 
-                    return Container(
-                      decoration: BoxDecoration(
-                        color: bgColor,
-                        borderRadius: BorderRadius.circular(12),
-                        boxShadow: [
-                          BoxShadow(
-                            color: shadowColor,
-                            blurRadius: 8,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(12),
+              return Center(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxWidth: isTablet ? 900 : double.infinity,
+                  ),
+                  child: ListView.separated(
+                    padding: const EdgeInsets.all(16),
+                    itemCount: cartItems.length,
+                    separatorBuilder: (_, _) => const SizedBox(height: 16),
+                    itemBuilder: (context, index) {
+                      final item = cartItems[index];
+                      final product = item.product;
+                      final specificProductAmount = ref
+                          .watch(cartNotifier.notifier)
+                          .getProductAmount(product.id ?? 0);
+
+                      return Container(
+                        decoration: BoxDecoration(
+                          color: bgColor,
+                          borderRadius: BorderRadius.circular(14),
+                          boxShadow: [
+                            BoxShadow(
+                              color: shadowColor,
+                              blurRadius: 10,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        padding: const EdgeInsets.all(16),
                         child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            // 🖼 Image
                             Container(
-                              width: 80,
-                              height: 80,
+                              width: isTablet ? 100 : 80,
+                              height: isTablet ? 100 : 80,
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: BorderRadius.circular(10),
                                 image: DecorationImage(
                                   image: NetworkImage(product.image ?? ''),
                                   fit: BoxFit.cover,
                                 ),
                               ),
                             ),
-                            const SizedBox(width: 16),
+
+                            const SizedBox(width: 20),
+
+                            // Details
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
                                     product.title ?? '',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 16,
-                                      color: textColor,
-                                    ),
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: isTablet ? 18 : 16,
+                                      color: textColor,
+                                    ),
                                   ),
-                                  const SizedBox(height: 4),
+
+                                  const SizedBox(height: 6),
+
                                   Text(
                                     product.description ?? '',
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
                                       color: subTextColor,
-                                      fontSize: 14,
+                                      fontSize: isTablet ? 15 : 14,
                                     ),
                                   ),
-                                  const SizedBox(height: 8),
+
+                                  const SizedBox(height: 12),
+
                                   Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
@@ -124,11 +141,13 @@ class _CartPageState extends ConsumerState<CartPage> {
                                       Text(
                                         '$currency${specificProductAmount.toStringAsFixed(2)}',
                                         style: TextStyle(
-                                          fontSize: 18,
+                                          fontSize: 20,
                                           fontWeight: FontWeight.bold,
                                           color: priceColor,
                                         ),
                                       ),
+
+                                      //Quantity
                                       Container(
                                         decoration: BoxDecoration(
                                           borderRadius: BorderRadius.circular(
@@ -152,7 +171,6 @@ class _CartPageState extends ConsumerState<CartPage> {
                                                   context: context,
                                                 );
                                               },
-                                              padding: EdgeInsets.zero,
                                             ),
                                             Text(
                                               '${item.cart.quantity}',
@@ -172,7 +190,6 @@ class _CartPageState extends ConsumerState<CartPage> {
                                                   productId: product.id ?? 0,
                                                 );
                                               },
-                                              padding: EdgeInsets.zero,
                                             ),
                                           ],
                                         ),
@@ -184,12 +201,12 @@ class _CartPageState extends ConsumerState<CartPage> {
                             ),
                           ],
                         ),
-                      ),
-                    );
-                  },
+                      );
+                    },
+                  ),
                 ),
-              ),
-            ],
+              );
+            },
           );
         },
       ),
